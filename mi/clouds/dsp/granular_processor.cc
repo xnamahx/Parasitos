@@ -157,30 +157,15 @@ void GranularProcessor::ProcessGranular(
 }
 
 void GranularProcessor::Process(
-    ShortFrame* input,
-    ShortFrame* output,
+    FloatFrame* input,
+    FloatFrame* output,
     size_t size) {
 
-  
-  /*if (silence_ || reset_buffers_ ||
-      previous_playback_mode_ != playback_mode_) {
-    float* output_samples = &output[0].l;
-    fill(&output_samples[0], &output_samples[size << 1], 0);
-    return;
-  }*/
-
-  // Convert input buffers to float, and mixdown for mono processing.
-  for (size_t i = 0; i < size; ++i) {
-    in_[i].l = static_cast<float>(input[i].l) / 32768.0f;
-    in_[i].r = static_cast<float>(input[i].r) / 32768.0f;
-  }
-  
   float reverb_amount = parameters_.reverb * 0.95f;
-  CONSTRAIN(reverb_amount, 0.0f, 1.0f);
   
   oliverb_.set_amount(reverb_amount * 0.54f);
     // Settings of the reverb
-  oliverb_.set_diffusion(0.3f + 0.5f * parameters_.oliverb_diffusion);
+  oliverb_.set_diffusion(0.05f + 0.94f * parameters_.oliverb_diffusion);
   oliverb_.set_size(0.05f + 0.94f * parameters_.oliverb_size);
   oliverb_.set_mod_rate(parameters_.oliverb_mod_rate);
   oliverb_.set_mod_amount(parameters_.oliverb_mod_amount * 300.0f);
@@ -199,8 +184,7 @@ void GranularProcessor::Process(
     1.0f;
   oliverb_.set_pitch_shift_amount(wet);
 
-  oliverb_.set_decay(parameters_.oliverb_density * 1.3f
-                   + 0.15f * abs(parameters_.oliverb_pitch) / 24.0f);
+  oliverb_.set_decay(parameters_.oliverb_density * 1.3f);
   oliverb_.set_input_gain(0.5f);
   float lp = parameters_.oliverb_texture < 0.5f ?
     parameters_.oliverb_texture * 2.0f : 1.0f;
@@ -212,7 +196,7 @@ void GranularProcessor::Process(
                                           // feedback of large
                                           // DC offset.
 
-  copy(&in_[0], &in_[size], &out_[0]);
+  copy(&input[0], &input[size], &out_[0]);
   oliverb_.Process(out_, size);
 
   const float post_gain = 1.2f;
@@ -225,10 +209,8 @@ void GranularProcessor::Process(
     float r = input[i].r * fade_out;
     l += out_[i].l * post_gain * fade_in;
     r += out_[i].r * post_gain * fade_in;
-    output[i].l = SoftConvert(l);
-    output[i].r = SoftConvert(r);
-    /*output[i].l = l;
-    output[i].r = r;*/
+    output[i].l = l;
+    output[i].r = r;
   }
 }
 

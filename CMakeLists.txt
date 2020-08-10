@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.0)
 
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../max-api/script/max-pretarget.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../min-api/script/min-pretarget.cmake)
 
 include_directories( 
 	"${C74_INCLUDES}"
@@ -27,12 +27,12 @@ set(MI_COMMON_SRC
        mi/stmlib/utils/random.cc
 )
 
-set(MILIB_SRC 
+set(MIPARASITOLIB_SRC 
         ${MI_COMMON_SRC}
         ${CLOUDS_SRC}
         )
 
-add_library(MILib ${MILIB_SRC} )
+add_library(MIPARASITOLib ${MIPARASITOLIB_SRC} )
 
 add_library( 
 	${PROJECT_NAME} 
@@ -40,6 +40,6 @@ add_library(
 	${PROJECT_NAME}.cpp
 )
 
-target_link_libraries(${PROJECT_NAME} MILib)
+target_link_libraries(${PROJECT_NAME} MIPARASITOLib)
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/../../max-api/script/max-posttarget.cmake)
+include(${CMAKE_CURRENT_SOURCE_DIR}/../../min-api/script/min-posttarget.cmake)

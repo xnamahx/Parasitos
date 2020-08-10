@@ -1,8 +1,8 @@
-# ParasitosDeOliver
+# Parasitos
 
-Windows x64
+Windows x64 / OSX
 
-Basado en el reverb Oliverb de Parasites, firmware alternativo para MI Clouds 
+Basado en Oliverb, reverb de Parasites firmware alternativo para MI Clouds 
 https://mqtthiqs.github.io/parasites/clouds.html
 
-![Imgur Image](https://i.imgur.com/XJ7Y06d.png)
+![Imgur Image](https://i.imgur.com/39mNlAI.png)
